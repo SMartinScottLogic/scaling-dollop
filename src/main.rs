@@ -1,9 +1,6 @@
 #[macro_use]
 extern crate rocket;
-use std::{
-    ffi::OsString,
-    path::{Path, PathBuf},
-};
+use std::path::{Path, PathBuf};
 
 use rocket::serde::{json::Json, Serialize};
 
@@ -32,7 +29,8 @@ impl From<walkdir::DirEntry> for File {
 #[get("/content/<path..>")]
 fn content(path: PathBuf) -> Json<Vec<File>> {
     let r = walkdir::WalkDir::new(Path::new("/media/simon").join(path))
-        .max_depth(1).min_depth(1)
+        .max_depth(1)
+        .min_depth(1)
         .into_iter()
         .filter_map(|e| e.ok())
         .map(|e| e.into())
